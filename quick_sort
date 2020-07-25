@@ -1,0 +1,14 @@
+def quicksort(ls):
+ if ls == []:
+  return []
+ else:
+  x, *xs = ls
+  smaller = quicksort([a for a in xs if a <= x])
+  bigger = quicksort([b for b in xs if b > x])
+  nls = smaller + [x] + bigger
+  return nls
+
+before  = [6,6,88,61,12,5,9,0,23,42,]
+after = quicksort(before)
+print(before)
+print(after)
