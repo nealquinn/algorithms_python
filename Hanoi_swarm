@@ -1,0 +1,84 @@
+numberOfSlices = int(input("Number of Slices: "))
+board = [[999],[i for i in range(numberOfSlices)],[999]]
+board[1].append(999)
+hold = 1 
+
+
+
+'''
+player1 just moves the fist slice in a circle
+'''
+def player1():
+	global hold
+	hold_tmp = hold
+	hold = (hold+1)%3
+	move(hold_tmp,hold)	
+	
+	
+''' 
+Player2 is forbidden to touch first slice.
+So he has to move the lower slice to the upper one
+If no slice is left to move, game is over
+'''
+def player2():
+	global hold
+	global board
+	valids = list(filter(lambda x: x!= hold,range(3)))
+	if (board[valids[0]][0] < board[valids[1]][0]):
+		getfrom = valids[0]
+		setto = valids[1]
+		
+	elif (board[valids[0]][0] > board[valids[1]][0]):
+		setto = valids[0]
+		getfrom = valids[1]
+	else:
+		raise Exception("finished")
+	move(getfrom,setto)
+
+
+'''
+move a slice
+'''
+def move(fromStack,toStack):
+	global board
+	board[toStack].insert(0,board[fromStack].pop(0))
+   
+   
+'''
+Output never gets wepapp - ok...
+'''
+def output():
+	global numberOfSlices
+
+	for  stack in board:
+		for i in range(numberOfSlices - len(stack) ):
+			print(" ",end = "")
+		for slice in stack:
+			if slice != 999:
+				print(slice,end = "")
+		print("|")
+	print()   
+	
+			
+print(numberOfSlices)	   
+		
+
+
+
+'''
+Now play
+Player1 begins 
+If Player2 is not able to make a move, game is over
+'''
+running = True
+player1()
+output()
+while running:
+	try:
+		player2()
+		output()
+		player1()
+		output()
+	except:
+		print("Tower rebuilt")
+		running = False
